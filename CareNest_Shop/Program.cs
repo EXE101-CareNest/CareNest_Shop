@@ -2,6 +2,8 @@
 using Microsoft.OpenApi.Models;
 using Shop.Application.Common;
 using Shop.Application.Features.Commands.Create;
+using Shop.Application.Features.Commands.Delete;
+using Shop.Application.Features.Commands.Update;
 using Shop.Application.Features.Queries.GetAllPaging;
 using Shop.Application.Features.Queries.GetById;
 using Shop.Application.Interfaces.CQRS;
@@ -84,11 +86,12 @@ builder.Services.AddSwaggerGen(c =>
 // Đăng ký các repository
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
+//command
 builder.Services.AddScoped<ICommandHandler<CreateCommand, Shop.Domain.Entitites.Shop>, CreateCommandHandler>();
-
+builder.Services.AddScoped<ICommandHandler<UpdateCommand, Shop.Domain.Entitites.Shop>, UpdateCommandHandler>();
+builder.Services.AddScoped<ICommandHandler<DeleteCommand>, DeleteCommandHandler>();
+//query
 builder.Services.AddScoped<IQueryHandler<GetAllPagingQuery, PageResult<ShopResponse>>, GetAllPagingQueryHandler>();
-
 builder.Services.AddScoped<IQueryHandler<GetByIdQuery, Shop.Domain.Entitites.Shop>, GetByIdQueryHandler>();
 
 builder.Services.Configure<JwtSettings>(

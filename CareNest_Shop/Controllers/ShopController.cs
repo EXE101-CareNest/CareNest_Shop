@@ -2,12 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Shop.Application.Common;
 using Shop.Application.Features.Commands.Create;
+using Shop.Application.Features.Commands.Delete;
+using Shop.Application.Features.Commands.Update;
 using Shop.Application.Features.Queries.GetAllPaging;
 using Shop.Application.Features.Queries.GetById;
 using Shop.Application.Interfaces.CQRS;
 using Shop.Domain.Commons.Constant;
 using Shop.Domain.Entitites;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CareNest_Shop.Controllers
 {
@@ -72,6 +73,43 @@ namespace CareNest_Shop.Controllers
             Shop.Domain.Entitites.Shop shop = await _dispatcher.DispatchAsync<CreateCommand, Shop.Domain.Entitites.Shop>(command);
 
             return this.OkResponse(shop, MessageConstant.SuccessCreate);
+        }
+
+        /// <summary>
+        /// Cập nhật thông tin cửa hàng 
+        /// </summary>
+        /// <param name="id">Id cửa hàng</param>
+        /// <param name="request">các thông tin cần sửa</param>
+        /// <returns></returns>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateShop(string id,[FromBody] UpdateRequest request)
+        {
+
+            var command = new UpdateCommand()
+            {
+                Id = id,
+                Name = request.Name,
+                Description = request.Description,
+                ImgUrl = request.ImgUrl,
+                OwnerId = request.OwnerId,
+                Status = request.Status,
+                WorkingDays = request.WorkingDays
+            };
+            Shop.Domain.Entitites.Shop shop = await _dispatcher.DispatchAsync<UpdateCommand, Shop.Domain.Entitites.Shop>(command);
+
+            return this.OkResponse(shop, MessageConstant.SuccessUpdate);
+        }
+
+        /// <summary>
+        /// xoá cửa hàng
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteShop(string id)
+        {
+            await _dispatcher.DispatchAsync(new DeleteCommand { Id = id });
+            return this.OkResponse(MessageConstant.SuccessDelete);
         }
     }
 }

@@ -1,8 +1,13 @@
-﻿namespace Shop.Domain.Commons.Enum
+﻿using System.ComponentModel;
+
+namespace Shop.Domain.Commons.Enum
 {
     public enum Status
     {
+        [Description("Active")]
         Active = 1,
-        Inactive = 2
+
+        [Description("Inactive")]
+        Inactive = 0
     }
 }

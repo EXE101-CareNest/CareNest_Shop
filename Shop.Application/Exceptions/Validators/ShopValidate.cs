@@ -1,4 +1,5 @@
 ﻿using Shop.Application.Features.Commands.Create;
+using Shop.Application.Features.Commands.Update;
 using Shop.Domain.Commons.Constant;
 using System.Text.RegularExpressions;
 
@@ -11,6 +12,14 @@ namespace Shop.Application.Exceptions.Validators
         /// </summary>
         /// <param name="command"></param>
         public static void ValidateCreate(CreateCommand command)
+        {
+            ValidateName(command.Name);
+            ValidateDescription(command.Description);
+            ValidateOwnerId(command.OwnerId);
+            ValidateWorkingDays(command.WorkingDays);
+        }
+
+        public static void ValidateUpdate(UpdateCommand command)
         {
             ValidateName(command.Name);
             ValidateDescription(command.Description);
