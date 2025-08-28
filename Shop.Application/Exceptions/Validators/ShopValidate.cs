@@ -1,12 +1,6 @@
 ﻿using Shop.Application.Features.Commands.Create;
 using Shop.Domain.Commons.Constant;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Shop.Application.Exceptions.Validators
 {
@@ -23,15 +17,15 @@ namespace Shop.Application.Exceptions.Validators
             ValidateOwnerId(command.OwnerId);
             ValidateWorkingDays(command.WorkingDays);
         }
-        public static void ValidateName (string? name)
+        public static void ValidateName(string? name)
         {
             //-Không được để trống.
-            if(string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 throw new BadRequestException(MessageConstant.MissingName);
             }
             //- Giới hạn độ dài(ví dụ 1 - 100 ký tự).
-            if(name.Length == 0 || name.Length > 100)
+            if (name.Length == 0 || name.Length > 100)
             {
                 throw new BadRequestException(MessageConstant.Exceed100CharsName);
             }
@@ -60,11 +54,11 @@ namespace Shop.Application.Exceptions.Validators
                 throw new BadRequestException(MessageConstant.Exceed500CharsDescription);
             }
         }
-        
+
         public static void ValidateWorkingDays(string? workingDay)
         {
             // ngày làm không được trống
-            if (!string.IsNullOrWhiteSpace(workingDay))
+            if (string.IsNullOrWhiteSpace(workingDay))
             {
                 throw new BadRequestException(MessageConstant.MissingWorkDay);
             }
@@ -76,11 +70,10 @@ namespace Shop.Application.Exceptions.Validators
             // - Các cặp cách nhau dấu ;
             // - Ví dụ: Mon-Fri 08:00 - 19:00 hoặc Mon 07:30-17:30
             string pattern = @"^(\s*(Mon|Tue|Wed|Thu|Fri|Sat|Sun)(-(Mon|Tue|Wed|Thu|Fri|Sat|Sun))?\s+\d{2}:\d{2}-\d{2}:\d{2}\s*;)*(\s*(Mon|Tue|Wed|Thu|Fri|Sat|Sun)(-(Mon|Tue|Wed|Thu|Fri|Sat|Sun))?\s+\d{2}:\d{2}-\d{2}:\d{2}\s*)$";
-            if(!Regex.IsMatch(workingDay,pattern, RegexOptions.IgnoreCase))
+            if (!Regex.IsMatch(workingDay, pattern, RegexOptions.IgnoreCase))
             {
                 throw new BadRequestException(MessageConstant.NotMatchFormatWorkDay);
             }
         }
     }
 }
- 

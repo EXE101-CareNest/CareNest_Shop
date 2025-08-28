@@ -1,7 +1,5 @@
 ﻿using Shop.Application.Interfaces.CQRS.Commands;
 using Shop.Domain.Commons.Enum;
-using Shop.Domain.Entitites;
-using System.Windows.Input;
 
 namespace Shop.Application.Features.Commands.Create
 {

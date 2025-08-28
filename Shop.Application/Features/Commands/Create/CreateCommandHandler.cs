@@ -1,5 +1,4 @@
-﻿
-using Shared.Helper;
+﻿using Shared.Helper;
 using Shop.Application.Exceptions.Validators;
 using Shop.Application.Interfaces.CQRS.Commands;
 using Shop.Application.Interfaces.UOW;

@@ -3,7 +3,7 @@ using Shop.Application.Interfaces.CQRS.Queries;
 
 namespace Shop.Application.Features.Queries.GetAllPaging
 {
-    public class GetAllPagingQuery: IQuery<PageResult<ShopResponse>>
+    public class GetAllPagingQuery : IQuery<PageResult<ShopResponse>>
     {
         public int Index { get; set; }
         public int PageSize { get; set; }

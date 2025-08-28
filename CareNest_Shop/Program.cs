@@ -1,7 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Shop.Application.Common;
+using Shop.Application.Features.Commands.Create;
+using Shop.Application.Features.Queries.GetAllPaging;
+using Shop.Application.Features.Queries.GetById;
 using Shop.Application.Interfaces.CQRS;
+using Shop.Application.Interfaces.CQRS.Commands;
+using Shop.Application.Interfaces.CQRS.Queries;
 using Shop.Application.Interfaces.Services;
 using Shop.Application.Interfaces.UOW;
 using Shop.Application.UseCases;
@@ -20,11 +25,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 // Lấy DatabaseSettings từ configuration
-DatabaseSettings dbSettings = builder.Configuration.GetSection("Database").Get<DatabaseSettings>()!;
+DatabaseSettings dbSettings = builder.Configuration.GetSection("ConnectionStrings:DefaultConnection").Get<DatabaseSettings>()!;
 dbSettings.Display();
 
 string connectionString = dbSettings?.GetConnectionString()
-                       ?? "Host=localhost;Port=5432;Database=shop-dev;Username=localhost;Password=your_password";
+                       ?? "Host=localhost;Port=5432;Database=shop-dev;Username=exe-carenest-dev;Password=nghi123";
 
 // Đăng ký DbContext với PostgreSQL
 builder.Services.AddDbContext<DatabaseContext>(options =>
@@ -79,6 +84,12 @@ builder.Services.AddSwaggerGen(c =>
 // Đăng ký các repository
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+builder.Services.AddScoped<ICommandHandler<CreateCommand, Shop.Domain.Entitites.Shop>, CreateCommandHandler>();
+
+builder.Services.AddScoped<IQueryHandler<GetAllPagingQuery, PageResult<ShopResponse>>, GetAllPagingQueryHandler>();
+
+builder.Services.AddScoped<IQueryHandler<GetByIdQuery, Shop.Domain.Entitites.Shop>, GetByIdQueryHandler>();
 
 builder.Services.Configure<JwtSettings>(
     builder.Configuration.GetSection("JwtSettings")
@@ -192,7 +203,6 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddScoped<IUseCaseDispatcher, UseCaseDispatcher>();
 
-builder.Services.AddSwaggerGen();
 
 
 var app = builder.Build();
