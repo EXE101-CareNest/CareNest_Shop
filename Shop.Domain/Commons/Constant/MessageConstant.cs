@@ -26,7 +26,7 @@
 
         //working day
         public const string MissingWorkDay = "Working Day must not be empty or null.";
-        public const string NotMatchFormatWorkDay = "Working Day is not match (ex: Mon-Fri 08:00 - 09:00 or Mon 08:00-09:00.";
+        public const string NotMatchFormatWorkDay = "Working Day is not match (ex: Mon-Fri 08:00 - 09:00 or Mon 08:00-09:00 or Mon-Fri 08:00-17:00; Sat 09:00-12:00)";
 
         public const string WrongFormatField = "The field is wrong format.";
         public const string NoPermissionCompany = "You don't have permission to interact with this company";

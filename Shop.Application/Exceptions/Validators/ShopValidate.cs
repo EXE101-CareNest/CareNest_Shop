@@ -77,7 +77,7 @@ namespace Shop.Application.Exceptions.Validators
             // - Khoảng ngày Mon-Fri hoặc đơn lẻ Mon
             // - Giờ 24h định dạng HH:mm
             // - Các cặp cách nhau dấu ;
-            // - Ví dụ: Mon-Fri 08:00 - 19:00 hoặc Mon 07:30-17:30
+            // - Ví dụ: Mon-Fri 08:00 - 19:00 hoặc Mon 07:30-17:30 hoặc Mon-Fri 08:00-19:00; Sat-Sun 10:00-16:00
             string pattern = @"^(\s*(Mon|Tue|Wed|Thu|Fri|Sat|Sun)(-(Mon|Tue|Wed|Thu|Fri|Sat|Sun))?\s+\d{2}:\d{2}-\d{2}:\d{2}\s*;)*(\s*(Mon|Tue|Wed|Thu|Fri|Sat|Sun)(-(Mon|Tue|Wed|Thu|Fri|Sat|Sun))?\s+\d{2}:\d{2}-\d{2}:\d{2}\s*)$";
             if (!Regex.IsMatch(workingDay, pattern, RegexOptions.IgnoreCase))
             {
