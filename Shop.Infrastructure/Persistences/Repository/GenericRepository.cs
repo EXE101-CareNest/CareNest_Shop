@@ -1,12 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shop.Domain.Repositories;
 using Shop.Infrastructure.Persistences.Database;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shop.Infrastructure.Persistences.Repository
 {

@@ -8,16 +8,14 @@ namespace Shop.Infrastructure.Persistences.Database
     {
         public DatabaseContext CreateDbContext(string[] args)
         {
-            // Lấy đường dẫn thư mục chạy hiện tại (thường là thư mục chứa project)
-            var basePath = Directory.GetCurrentDirectory();
+            // Đường dẫn đến thư mục chứa project API, giả sử cách Infrastructure 1 cấp thư mục
+            var apiProjectPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "CareNest_Shop");
 
-            // Tạo builder để đọc file appsettings.json
             IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(basePath)
-                .AddJsonFile("appsettings.json")
+                .SetBasePath(apiProjectPath) // trỏ đúng đến thư mục chứa appsettings.Development.json
+                .AddJsonFile("appsettings.Development.json", optional: false)
                 .Build();
 
-            // Lấy connection string theo key trong appsettings.json
             string connectionString = configuration.GetConnectionString("DefaultConnection");
 
             var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
@@ -26,4 +24,5 @@ namespace Shop.Infrastructure.Persistences.Database
             return new DatabaseContext(optionsBuilder.Options);
         }
     }
+
 }
