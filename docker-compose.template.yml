@@ -1,0 +1,13 @@
+services:
+  ${MY_SERVICE_NAME}:
+    container_name: ${MY_CONTAINER_NAME}
+    restart: always
+    image: ${MY_IMAGE_NAME}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${HOST_PORT}:${CONTAINER_PORT}"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+    
