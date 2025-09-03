@@ -1,0 +1,18 @@
+services:
+ shopapi:
+      image: carenest-shop-api-dev:latest
+      restart: always
+      build:
+        context: .
+        dockerfile: Dockerfile
+      ports:
+        - "8001:8080"
+      container_name: carenest-shop-api-dev
+      environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+      networks:
+        carenest-dev-network:
+          ipv4_address: 190.168.2.21
+networks:
+  carenest-dev-network:
+    external: true                          
