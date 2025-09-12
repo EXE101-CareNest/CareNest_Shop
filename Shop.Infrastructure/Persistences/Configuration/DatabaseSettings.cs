@@ -2,11 +2,11 @@
 {
     public class DatabaseSettings
     {
-        public required string Ip { get; set; }
+        public string? Ip { get; set; }
         public int Port { get; set; }
-        public required string User { get; set; }
-        public required string Password { get; set; }
-        public required string Database { get; set; }
+        public  string? User { get; set; }
+        public  string? Password { get; set; }
+        public  string? Database { get; set; }
         public string GetConnectionString()
         {
             return $"Host={Ip};Port={Port};Database={Database};Username={User};Password={Password}";

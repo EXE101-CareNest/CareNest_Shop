@@ -1,4 +1,5 @@
-﻿using Shop.Application.Interfaces.CQRS.Queries;
+﻿using Shop.Application.Exceptions;
+using Shop.Application.Interfaces.CQRS.Queries;
 using Shop.Application.Interfaces.UOW;
 using Shop.Domain.Commons.Constant;
 
@@ -19,7 +20,7 @@ namespace Shop.Application.Features.Queries.GetById
 
             if (shop == null)
             {
-                throw new Exception(MessageConstant.NotFound);
+                throw new BadRequestException(MessageConstant.NotFound);
             }
             return shop;
         }

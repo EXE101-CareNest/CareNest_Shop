@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CareNest_Shop.Middleware;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Shop.Application.Common;
 using Shop.Application.Features.Commands.Create;
@@ -27,11 +28,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 // Lấy DatabaseSettings từ configuration
-DatabaseSettings dbSettings = builder.Configuration.GetSection("ConnectionStrings:DefaultConnection").Get<DatabaseSettings>()!;
+DatabaseSettings dbSettings = builder.Configuration.GetSection("DatabaseSettings").Get<DatabaseSettings>()!;
 dbSettings.Display();
-
 string connectionString = dbSettings?.GetConnectionString()
-                       ?? "Host=localhost;Port=5432;Database=shop-dev;Username=exe-carenest-dev;Password=nghi123";
+                        ?? "Host=localhost;Port=5432;Database=shop-dev;Username=exe-carenest-dev;Password=nghi123";
 
 // Đăng ký DbContext với PostgreSQL
 builder.Services.AddDbContext<DatabaseContext>(options =>
@@ -216,6 +216,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 

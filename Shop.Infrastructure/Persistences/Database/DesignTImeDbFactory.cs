@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using Shop.Infrastructure.Persistences.Configuration;
 
 namespace Shop.Infrastructure.Persistences.Database
 {
@@ -8,15 +9,18 @@ namespace Shop.Infrastructure.Persistences.Database
     {
         public DatabaseContext CreateDbContext(string[] args)
         {
-            // Đường dẫn đến thư mục chứa project API, giả sử cách Infrastructure 1 cấp thư mục
             var apiProjectPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "CareNest_Shop");
+            apiProjectPath = Path.GetFullPath(apiProjectPath);
 
             IConfigurationRoot configuration = new ConfigurationBuilder()
-                .SetBasePath(apiProjectPath) // trỏ đúng đến thư mục chứa appsettings.Development.json
+                .SetBasePath(apiProjectPath)
                 .AddJsonFile("appsettings.Development.json", optional: false)
                 .Build();
 
-            string connectionString = configuration.GetConnectionString("DefaultConnection");
+            var dbSettings = new DatabaseSettings();
+            configuration.GetSection("DatabaseSettings").Bind(dbSettings);
+
+            string connectionString = dbSettings.GetConnectionString();
 
             var optionsBuilder = new DbContextOptionsBuilder<DatabaseContext>();
             optionsBuilder.UseNpgsql(connectionString);
