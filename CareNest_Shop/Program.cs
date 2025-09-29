@@ -205,6 +205,10 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 //});
 
 builder.Services.AddScoped<IUseCaseDispatcher, UseCaseDispatcher>();
+builder.Services.Configure<RouteOptions>(options =>
+{
+    options.LowercaseUrls = true;
+});
 
 
 
