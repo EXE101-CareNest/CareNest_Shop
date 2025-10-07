@@ -1,6 +1,7 @@
 ﻿using Shop.Application.Common;
 using Shop.Application.Interfaces.CQRS.Queries;
 using Shop.Application.Interfaces.UOW;
+using System.Linq.Expressions;
 
 namespace Shop.Application.Features.Queries.GetAllPaging
 {
@@ -19,8 +20,13 @@ namespace Shop.Application.Features.Queries.GetAllPaging
 
             var orderByFunc = GetOrderByFunc(query.SortColumn, query.SortDirection);
 
+            Expression<Func<Domain.Entitites.Shop, bool>>? predicate = null;
+            if (!string.IsNullOrWhiteSpace(query.OwnerId))
+            {
+                predicate = ad => ad.OwnerId.Contains(query.OwnerId);
+            }
             IEnumerable<ShopResponse> a = await _unitOfWork.GetRepository<Domain.Entitites.Shop>().FindAsync(
-                predicate: null,
+                predicate: predicate,
                 orderBy: orderByFunc,
                 selector: selector,
                 pageSize: query.PageSize,

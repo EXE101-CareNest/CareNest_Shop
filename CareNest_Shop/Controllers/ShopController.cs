@@ -35,6 +35,7 @@ namespace CareNest_Shop.Controllers
         public async Task<IActionResult> GetPagingShop(
             [FromQuery] int pageIndex = 1,
             [FromQuery] int pageSize = 10,
+            [FromQuery] string? OwnerId = null,
             [FromQuery] string? sortColumn = null,
             [FromQuery] string? sortDirection = "asc")
         {
@@ -43,7 +44,8 @@ namespace CareNest_Shop.Controllers
                 Index = pageIndex,
                 PageSize = pageSize,
                 SortColumn = sortColumn,
-                SortDirection = sortDirection
+                SortDirection = sortDirection,
+                OwnerId = OwnerId
             };
             var result = await _dispatcher.DispatchQueryAsync<GetAllPagingQuery, PageResult<ShopResponse>>(query);
             return this.OkResponse(result, MessageConstant.SuccessGet);
