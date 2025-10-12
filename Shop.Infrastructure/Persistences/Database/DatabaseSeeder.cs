@@ -19,7 +19,7 @@ namespace Shop.Infrastructure.Persistences.Database
             {
                 new Domain.Entitites.Shop
                 {
-                    Id = Guid.NewGuid().ToString("N"),
+                    Id = "3f7a5c2b8e9d4f1a6b3c7e8d9f2a4b5c",
                     OwnerId = "owner-001",
                     Name = "Pet Paradise Store",
                     Description = "Cửa hàng thú cưng chuyên cung cấp thức ăn, đồ chơi, phụ kiện và dịch vụ chăm sóc cho chó, mèo và các thú cưng khác",
@@ -31,7 +31,7 @@ namespace Shop.Infrastructure.Persistences.Database
                 },
                 new Domain.Entitites.Shop
                 {
-                    Id = Guid.NewGuid().ToString("N"),
+                    Id = "9d4e7f2a5b8c1e3d6f9a2b4c7e5d8f1a",
                     OwnerId = "owner-002",
                     Name = "Furry Friends Shop",
                     Description = "Cửa hàng chuyên về thú cưng với đầy đủ các sản phẩm từ thức ăn cao cấp, đồ chơi, chuồng nuôi đến dịch vụ spa và grooming",
