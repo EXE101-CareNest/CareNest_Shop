@@ -15,9 +15,9 @@ namespace Shop.Infrastructure.Persistences.Database
             }
 
             // Tạo hai shop mẫu về thú cưng
-            var shops = new List<Shop>
+            var shops = new List<Shop.Domain.Entitites.Shop>
             {
-                new Shop
+                new Domain.Entitites.Shop
                 {
                     Id = Guid.NewGuid().ToString("N"),
                     OwnerId = "owner-001",
@@ -29,10 +29,10 @@ namespace Shop.Infrastructure.Persistences.Database
                     CreatedAt = DateTimeOffset.UtcNow,
                     CreatedBy = "system"
                 },
-                new Shop
+                new Domain.Entitites.Shop
                 {
                     Id = Guid.NewGuid().ToString("N"),
-                    OwnerId = "owner-002", 
+                    OwnerId = "owner-002",
                     Name = "Furry Friends Shop",
                     Description = "Cửa hàng chuyên về thú cưng với đầy đủ các sản phẩm từ thức ăn cao cấp, đồ chơi, chuồng nuôi đến dịch vụ spa và grooming",
                     Status = Status.Active,
