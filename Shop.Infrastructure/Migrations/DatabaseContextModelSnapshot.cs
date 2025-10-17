@@ -27,6 +27,21 @@ namespace Shop.Infrastructure.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
+                    b.Property<string>("BankAccountName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BankAccountNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BankBranch")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BankCode")
+                        .HasColumnType("text");
+
+                    b.Property<string>("BankName")
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset?>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -48,12 +63,18 @@ namespace Shop.Infrastructure.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<string>("Note")
+                        .HasColumnType("text");
+
                     b.Property<string>("OwnerId")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
+
+                    b.Property<string>("SwiftCode")
+                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -66,7 +87,7 @@ namespace Shop.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Shops", (string)null);
+                    b.ToTable("Shops");
                 });
 #pragma warning restore 612, 618
         }
