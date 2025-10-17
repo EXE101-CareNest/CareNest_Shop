@@ -95,7 +95,12 @@ namespace CareNest_Shop.Controllers
                 ImgUrl = request.ImgUrl,
                 OwnerId = request.OwnerId,
                 Status = request.Status,
-                WorkingDays = request.WorkingDays
+                WorkingDays = request.WorkingDays,
+                BankAccountName = request.BankAccountName,
+                BankAccountNumber = request.BankAccountNumber,
+                BankName = request.BankName,
+                BankCode = request.BankCode,
+                Note = request.Note
             };
             Shop.Domain.Entitites.Shop shop = await _dispatcher.DispatchAsync<UpdateCommand, Shop.Domain.Entitites.Shop>(command);
 

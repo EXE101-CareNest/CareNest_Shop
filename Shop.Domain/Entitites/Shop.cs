@@ -29,5 +29,13 @@ namespace Shop.Domain.Entitites
         /// ngày làm việc 
         /// </summary>
         public string? WorkingDays { get; set; }
+                // Thông tin tài khoản ngân hàng (1 shop = 1 tài khoản)
+        public string? BankAccountName { get; set; }     // Tên chủ tài khoản
+        public string? BankAccountNumber { get; set; }   // Số tài khoản
+        public string? BankName { get; set; }            // Tên ngân hàng (VD: Vietcombank)
+        public string? BankCode { get; set; }            // Mã ngân hàng (nếu dùng chuẩn nội bộ/SDK)
+        public string? BankBranch { get; set; }          // Chi nhánh (nếu cần)
+        public string? SwiftCode { get; set; }           // SWIFT (nếu có giao dịch quốc tế)
+        public string? Note { get; set; }
     }
 }

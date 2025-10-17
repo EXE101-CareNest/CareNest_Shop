@@ -30,6 +30,11 @@ namespace Shop.Application.Features.Commands.Update
             if (command.WorkingDays != null) shop.WorkingDays = command.WorkingDays;
             if (command.OwnerId != null) shop.OwnerId = command.OwnerId;
             if (command.ImgUrl != null) shop.ImgUrl = command.ImgUrl;
+            if (command.BankAccountName != null) shop.BankAccountName = command.BankAccountName;
+            if (command.BankAccountNumber != null) shop.BankAccountNumber = command.BankAccountNumber;
+            if (command.BankName != null) shop.BankName = command.BankName;
+            if (command.BankCode != null) shop.BankCode = command.BankCode;
+            if (command.Note != null) shop.Note = command.Note;
 
             shop.Status = command.Status;
             shop.UpdatedAt = TimeHelper.GetUtcNow();

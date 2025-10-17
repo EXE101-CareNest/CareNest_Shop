@@ -11,5 +11,10 @@ namespace Shop.Application.Features.Queries.GetAllPaging
         public Status Status { get; set; }
         public string? ImgUrl { get; set; }
         public string? WorkingDays { get; set; }
+        public string? BankAccountName { get; set; }
+        public string? BankAccountNumber { get; set; }
+        public string? BankName { get; set; }
+        public string? BankCode { get; set; }
+        public string? Note { get; set; }
     }
 }

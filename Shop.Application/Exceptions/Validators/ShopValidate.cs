@@ -17,6 +17,7 @@ namespace Shop.Application.Exceptions.Validators
             ValidateDescription(command.Description);
             ValidateOwnerId(command.OwnerId);
             ValidateWorkingDays(command.WorkingDays);
+            ValidateBankFields(command.BankAccountName, command.BankAccountNumber, command.BankName, command.BankCode, command.Note);
         }
 
         public static void ValidateUpdate(UpdateCommand command)
@@ -25,6 +26,7 @@ namespace Shop.Application.Exceptions.Validators
             ValidateDescription(command.Description);
             ValidateOwnerId(command.OwnerId);
             ValidateWorkingDays(command.WorkingDays);
+            ValidateBankFields(command.BankAccountName, command.BankAccountNumber, command.BankName, command.BankCode, command.Note);
         }
         public static void ValidateName(string? name)
         {
@@ -82,6 +84,34 @@ namespace Shop.Application.Exceptions.Validators
             if (!Regex.IsMatch(workingDay, pattern, RegexOptions.IgnoreCase))
             {
                 throw new BadRequestException(MessageConstant.NotMatchFormatWorkDay);
+            }
+        }
+
+        private static void ValidateBankFields(string? accountName, string? accountNumber, string? bankName, string? bankCode, string? note)
+        {
+            if (!string.IsNullOrWhiteSpace(accountName) && accountName.Length > 100)
+            {
+                throw new BadRequestException(MessageConstant.Exceed100CharsName);
+            }
+
+            if (!string.IsNullOrWhiteSpace(accountNumber) && accountNumber.Length > 30)
+            {
+                throw new BadRequestException(MessageConstant.WrongFormatField);
+            }
+
+            if (!string.IsNullOrWhiteSpace(bankName) && bankName.Length > 100)
+            {
+                throw new BadRequestException(MessageConstant.Exceed100CharsName);
+            }
+
+            if (!string.IsNullOrWhiteSpace(bankCode) && bankCode.Length > 20)
+            {
+                throw new BadRequestException(MessageConstant.WrongFormatField);
+            }
+
+            if (!string.IsNullOrWhiteSpace(note) && note.Length > 500)
+            {
+                throw new BadRequestException(MessageConstant.Exceed500CharsDescription);
             }
         }
     }

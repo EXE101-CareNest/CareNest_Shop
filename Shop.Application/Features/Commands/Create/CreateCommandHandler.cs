@@ -27,6 +27,11 @@ namespace Shop.Application.Features.Commands.Create
                 Status = command.Status,
                 WorkingDays = command.WorkingDays,
                 Name = command.Name,
+                BankAccountName = command.BankAccountName,
+                BankAccountNumber = command.BankAccountNumber,
+                BankName = command.BankName,
+                BankCode = command.BankCode,
+                Note = command.Note,
                 CreatedBy = null
             };
             await _unitOfWork.GetRepository<Domain.Entitites.Shop>().AddAsync(shop);
