@@ -107,9 +107,10 @@ builder.Services.AddCors(options =>
         builder =>
         {
             builder
-                .AllowAnyOrigin()
+                .SetIsOriginAllowed(_ => true)
                 .AllowAnyMethod()
-                .AllowAnyHeader();
+                .AllowAnyHeader()
+                .AllowCredentials();
         });
 });
 
@@ -143,12 +144,10 @@ using (var scope = app.Services.CreateScope())
 
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
-app.UseCors("AllowAll");
-
 app.UseHttpsRedirection();
-
+app.UseRouting();
+app.UseCors("AllowAll");
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
