@@ -40,11 +40,7 @@ namespace Shop.Application.Exceptions.Validators
             {
                 throw new BadRequestException(MessageConstant.Exceed100CharsName);
             }
-            //- Không chứa ký tự đặc biệt (!@#$^*&<>?)
-            if (!Regex.IsMatch(name, @"^[a-zA-Z0-9\s]+$"))
-            {
-                throw new BadRequestException(MessageConstant.SpecialCharacterName);
-            }
+          
         }
 
         public static void ValidateOwnerId(string? id)
