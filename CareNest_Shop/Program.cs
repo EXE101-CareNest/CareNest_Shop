@@ -30,8 +30,9 @@ builder.Services.AddHttpContextAccessor();
 // Lấy DatabaseSettings từ configuration
 DatabaseSettings dbSettings = builder.Configuration.GetSection("DatabaseSettings").Get<DatabaseSettings>()!;
 dbSettings.Display();
-string connectionString = dbSettings?.GetConnectionString()
-                        ?? "Host=localhost;Port=5432;Database=shop-dev;Username=exe-carenest-dev;Password=nghi123";
+string connectionString = (dbSettings?.GetConnectionString()
+                        ?? "Host=localhost;Port=5432;Database=shop-dev;Username=exe-carenest-dev;Password=nghi123")
+                        + ";Pooling=true;Maximum Pool Size=5;Minimum Pool Size=0;Timeout=15;";
 
 // Đăng ký DbContext với PostgreSQL
 builder.Services.AddDbContext<DatabaseContext>(options =>
@@ -41,6 +42,7 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
             maxRetryCount: 5,
             maxRetryDelay: TimeSpan.FromSeconds(5),
             errorCodesToAdd: null);
+        // npgsqlOptions.CommandTimeout(60); // tuỳ chọn khi cần
     }));
 
 builder.Services.AddTransient<DatabaseSeeder>();
@@ -130,7 +132,8 @@ builder.Services.Configure<RouteOptions>(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+var swaggerEnabled = app.Environment.IsDevelopment() || builder.Configuration.GetValue<bool>("Swagger:Enabled");
+if (swaggerEnabled)
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -138,17 +141,19 @@ if (app.Environment.IsDevelopment())
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-    context.Database.Migrate();
+    var runMigrations = Environment.GetEnvironmentVariable("RUN_MIGRATIONS");
+    if (!string.IsNullOrWhiteSpace(runMigrations) && runMigrations.Equals("true", StringComparison.OrdinalIgnoreCase))
+    {
+        context.Database.Migrate();
+    }
 }
 
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 
-app.UseCors("AllowAll");
-
 app.UseHttpsRedirection();
-
+app.UseRouting();
+app.UseCors("AllowAll");
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
