@@ -29,7 +29,51 @@ builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 // Lấy DatabaseSettings từ configuration
 DatabaseSettings dbSettings = builder.Configuration.GetSection("DatabaseSettings").Get<DatabaseSettings>()!;
+
+// Ở môi trường Production, các giá trị trong appsettings có dạng ${DB_*} sẽ không tự mở rộng.
+// Chủ động đọc biến môi trường và ghi đè nếu thấy placeholder hoặc giá trị trống.
+string? envHost = Environment.GetEnvironmentVariable("DB_HOST");
+string? envPort = Environment.GetEnvironmentVariable("DB_PORT");
+string? envUser = Environment.GetEnvironmentVariable("DB_USER");
+string? envPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+string? envDatabase = Environment.GetEnvironmentVariable("DB_NAME");
+
+bool IsPlaceholder(string? value) => !string.IsNullOrWhiteSpace(value) && value!.TrimStart().StartsWith("${");
+
+if (IsPlaceholder(dbSettings.Ip) || string.IsNullOrWhiteSpace(dbSettings.Ip))
+{
+    dbSettings.Ip = string.IsNullOrWhiteSpace(envHost) ? dbSettings.Ip : envHost;
+}
+
+if (dbSettings.Port == 0 || IsPlaceholder(dbSettings.Port.ToString()))
+{
+    if (int.TryParse(envPort, out var parsedPort))
+    {
+        dbSettings.Port = parsedPort;
+    }
+    else
+    {
+        dbSettings.Port = 5432;
+    }
+}
+
+if (IsPlaceholder(dbSettings.User) || string.IsNullOrWhiteSpace(dbSettings.User))
+{
+    dbSettings.User = string.IsNullOrWhiteSpace(envUser) ? dbSettings.User : envUser;
+}
+
+if (IsPlaceholder(dbSettings.Password) || string.IsNullOrWhiteSpace(dbSettings.Password))
+{
+    dbSettings.Password = string.IsNullOrWhiteSpace(envPassword) ? dbSettings.Password : envPassword;
+}
+
+if (IsPlaceholder(dbSettings.Database) || string.IsNullOrWhiteSpace(dbSettings.Database))
+{
+    dbSettings.Database = string.IsNullOrWhiteSpace(envDatabase) ? dbSettings.Database : envDatabase;
+}
+
 dbSettings.Display();
+
 string connectionString = (dbSettings?.GetConnectionString()
                         ?? "Host=localhost;Port=5432;Database=shop-dev;Username=exe-carenest-dev;Password=nghi123")
                         + ";Pooling=true;Maximum Pool Size=5;Minimum Pool Size=0;Timeout=15;";
