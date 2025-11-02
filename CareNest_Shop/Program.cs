@@ -78,6 +78,21 @@ string connectionString = (dbSettings?.GetConnectionString()
                         ?? "Host=localhost;Port=5432;Database=shop-dev;Username=exe-carenest-dev;Password=nghi123")
                         + ";Pooling=true;Maximum Pool Size=5;Minimum Pool Size=0;Timeout=15;";
 
+// Xử lý biến môi trường cho APIService
+var apiServiceSection = builder.Configuration.GetSection("APIService");
+if (apiServiceSection.Exists())
+{
+    string? apiBaseUrl = apiServiceSection["BaseUrlAccount"];
+    if (IsPlaceholder(apiBaseUrl) || string.IsNullOrWhiteSpace(apiBaseUrl))
+    {
+        string? envApiBaseUrl = Environment.GetEnvironmentVariable("API_BASE_URL");
+        if (!string.IsNullOrWhiteSpace(envApiBaseUrl))
+        {
+            builder.Configuration["APIService:BaseUrlAccount"] = envApiBaseUrl;
+        }
+    }
+}
+
 // Đăng ký DbContext với PostgreSQL
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseNpgsql(connectionString, npgsqlOptions =>
