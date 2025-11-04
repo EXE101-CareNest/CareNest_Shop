@@ -32,6 +32,8 @@ DatabaseSettings dbSettings = builder.Configuration.GetSection("DatabaseSettings
 
 // Ở môi trường Production, các giá trị trong appsettings có dạng ${DB_*} sẽ không tự mở rộng.
 // Chủ động đọc biến môi trường và ghi đè nếu thấy placeholder hoặc giá trị trống.
+// Hỗ trợ cả biến hợp nhất dạng DATABASE_URL (vd: postgres://user:pass@host:5432/dbname)
+string? databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 string? envHost = Environment.GetEnvironmentVariable("DB_HOST");
 string? envPort = Environment.GetEnvironmentVariable("DB_PORT");
 string? envUser = Environment.GetEnvironmentVariable("DB_USER");
@@ -39,6 +41,43 @@ string? envPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
 string? envDatabase = Environment.GetEnvironmentVariable("DB_NAME");
 
 bool IsPlaceholder(string? value) => !string.IsNullOrWhiteSpace(value) && value!.TrimStart().StartsWith("${");
+
+// Nếu có DATABASE_URL thì parse ra các thành phần và ghi đè biến tương ứng
+if (!string.IsNullOrWhiteSpace(databaseUrl))
+{
+    try
+    {
+        // Một số nền tảng dùng scheme lạ (vd: zvpostgres), nhưng Uri vẫn parse được
+        var uri = new Uri(databaseUrl);
+        // user:pass
+        string userInfo = uri.UserInfo;
+        string parsedUser = envUser;
+        string parsedPassword = envPassword;
+        if (!string.IsNullOrWhiteSpace(userInfo))
+        {
+            var parts = userInfo.Split(':', 2);
+            if (parts.Length == 2)
+            {
+                parsedUser = Uri.UnescapeDataString(parts[0]);
+                parsedPassword = Uri.UnescapeDataString(parts[1]);
+            }
+        }
+
+        string parsedHost = string.IsNullOrWhiteSpace(uri.Host) ? envHost ?? dbSettings.Ip : uri.Host;
+        int parsedPort = uri.Port > 0 ? uri.Port : (int)(!string.IsNullOrWhiteSpace(envPort) && int.TryParse(envPort, out var p) ? p : (dbSettings.Port == 0 ? 5432 : dbSettings.Port));
+        string parsedDb = uri.AbsolutePath?.Trim('/') ?? envDatabase ?? dbSettings.Database;
+
+        envHost = parsedHost;
+        envPort = parsedPort.ToString();
+        envUser = parsedUser;
+        envPassword = parsedPassword;
+        envDatabase = parsedDb;
+    }
+    catch
+    {
+        // Bỏ qua nếu parse lỗi, dùng các biến env rời hoặc cấu hình sẵn có
+    }
+}
 
 if (IsPlaceholder(dbSettings.Ip) || string.IsNullOrWhiteSpace(dbSettings.Ip))
 {
